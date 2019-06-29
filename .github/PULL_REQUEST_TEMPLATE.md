@@ -17,9 +17,8 @@ Please include a summary of the change and which issue is fixed. Please also inc
 
 - [ ] OpenFaaS Function Exchange Format
 - [ ] Message Format
-- [ ] Documentation
+- [ ] Documentation ([Doc repository](https://github.com/UST-MICO/docs))
 
 # Checklist
 
 - [ ] Ensure that new source files include the [license header](https://github.com/UST-MICO/mico/blob/master/CONTRIBUTING.md#source-file-headers)
-- [ ] Ensure [JavaDoc is up to date](https://github.com/UST-MICO/mico/tree/master/docs#build-the-documentation-locally)
