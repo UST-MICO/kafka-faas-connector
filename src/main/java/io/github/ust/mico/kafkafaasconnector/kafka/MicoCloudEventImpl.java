@@ -19,10 +19,12 @@
 
 package io.github.ust.mico.kafkafaasconnector.kafka;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
 import io.cloudevents.CloudEvent;
 import io.cloudevents.Extension;
 import lombok.AllArgsConstructor;
@@ -43,6 +45,7 @@ import java.util.*;
 @AllArgsConstructor
 @Accessors(chain = true)
 @JsonDeserialize(as = MicoCloudEventImpl.class)
+@JsonNaming(value = PropertyNamingStrategy.LowerCaseStrategy.class)
 public class MicoCloudEventImpl<T> implements CloudEvent<T> {
 
     protected static final String SPEC_VERSION = "0.2";
@@ -51,7 +54,6 @@ public class MicoCloudEventImpl<T> implements CloudEvent<T> {
     private String id;
     private URI source;
     private String type;
-    @JsonAlias({"specversion"})
     private String specVersion = SPEC_VERSION;
 
 
