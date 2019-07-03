@@ -96,17 +96,17 @@ public class ConfigurationTests {
 
     @Test
     public void testOpenFaaSConfig() {
-        assertThat(System.getenv("OPENFAAS_FUNCTION_NAME"), is(openFaaSConfig.getFunctionName()));
-        assertThat(System.getenv("OPENFAAS_GATEWAY"), is(openFaaSConfig.getGateway()));
+        assertThat("config_openfaas_func", is(openFaaSConfig.getFunctionName()));
+        assertThat("config_openfaas_gateway", is(openFaaSConfig.getGateway()));
     }
 
     @Test
     public void testKafkaConfig() {
-        assertThat(System.getenv("KAFKA_GROUP_ID"), is(kafkaConfig.getGroupId()));
-        assertThat(System.getenv("KAFKA_TOPIC_INPUT"), is(kafkaConfig.getInputTopic()));
-        assertThat(System.getenv("KAFKA_TOPIC_OUTPUT"), is(kafkaConfig.getOutputTopic()));
-        assertThat(System.getenv("KAFKA_TOPIC_INVALID_MESSAGE"), is(kafkaConfig.getInvalidMessageTopic()));
-        assertThat(System.getenv("KAFKA_TOPIC_DEAD_LETTER"), is(kafkaConfig.getDeadLetterTopic()));
-        assertThat(System.getenv("KAFKA_TOPIC_TEST_MESSAGE_OUTPUT"), is(kafkaConfig.getTestMessageOutputTopic()));
+        assertThat("kafka_group_id", is(kafkaConfig.getGroupId()));
+        assertThat("config_kafka_in", is(kafkaConfig.getInputTopic()));
+        assertThat("config_kafka_out", is(kafkaConfig.getOutputTopic()));
+        assertThat("config_kafka_invalid", is(kafkaConfig.getInvalidMessageTopic()));
+        assertThat("config_kafka_dead_letter", is(kafkaConfig.getDeadLetterTopic()));
+        assertThat("test_msg", is(kafkaConfig.getTestMessageOutputTopic()));
     }
 }
