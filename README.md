@@ -66,3 +66,20 @@ Restart it by deleting the Kubernetes pod:
 ```bash
 kubectl -n $NAMESPACE delete pod $(kubectl get pods -n $NAMESPACE --selector=run=kafka-faas-connector --output=jsonpath={.items..metadata.name})
 ```
+
+## Environment Variables
+| Variable                          | Description                                                                      | Default Value            |
+|-----------------------------------|----------------------------------------------------------------------------------|--------------------------|
+| APPLICATION_NAME                  | The spring application name                                                      | kafka-faas-connector     |
+| APPLICATION_PORT                  | The server port                                                                  | 8080                     |
+| LOGGING_LEVEL_KAFKAFAASCONNECTOR  | Logging level of the Kafka-FaaS-Connector                                        | DEBUG                    |
+| LOGGING_LEVEL_KAFKA_CONSUMER_INFO | Logging level of the kafka consumer                                              | INFO                     |
+| KAFKA_BOOTSTRAP_SERVERS           | The URLs of the bootstrap servers                                                | localhost:9092           |
+| KAFKA_GROUP_ID                    | The group id for kafka                                                           | mico                     |
+| KAFKA_TOPIC_INPUT                 | The topic, on which the Kafka-Faas-Connector receives messages                   | transform-request        |
+| KAFKA_TOPIC_OUTPUT                | The topic, to which the kafka-faas-connector forwards the processed messages     | transform-result         |
+| KAFKA_TOPIC_INVALID_MESSAGE       | The topic, to which invalid messages are forwarded                               | InvalidMessage           |
+| KAFKA_TOPIC_DEAD_LETTER           | The topic, to which messages are forwarded that can't/shouldn't be delivered     | DeadLetter               |
+| KAFKA_TOPIC_TEST_MESSAGE_OUTPUT   | The topic, to which test messages are forwarded                                  | TestMessagesOutput       |
+| OPENFAAS_GATEWAY                  | The URL of the OpenFaaS gateway                                                  | http://127.0.0.1:8080    |
+| OPENFAAS_FUNCTION_NAME            | The name of the OpenFaaS function that shall be used for processing the messages | faas-message-transformer |
