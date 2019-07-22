@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,9 +78,9 @@ public class CloudEventTestUtils {
      * @return
      */
     public static MicoCloudEventImpl<JsonNode> addMultipleTopicRoutingSteps(MicoCloudEventImpl<JsonNode> message, List<String> destinations) {
-        Optional<List<List<String>>> routingSlip = message.getRoutingSlip();
-        List<List<String>> newRoutingSlip = routingSlip.orElse(new ArrayList<>());
-        newRoutingSlip.add(destinations);
+        Optional<LinkedList<List<String>>> routingSlip = message.getRoutingSlip();
+        LinkedList<List<String>> newRoutingSlip = routingSlip.orElse(new LinkedList<>());
+        newRoutingSlip.addLast(destinations);
         return message.setRoutingSlip(newRoutingSlip);
     }
 

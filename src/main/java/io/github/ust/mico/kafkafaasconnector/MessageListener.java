@@ -40,6 +40,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
@@ -180,10 +181,9 @@ public class MessageListener {
      * @param cloudEvent the cloud event to send
      */
     public void sendCloudEvent(MicoCloudEventImpl<JsonNode> cloudEvent, String originalMessageId) {
-        List<List<String>> routingSlip = cloudEvent.getRoutingSlip().orElse(new ArrayList<>());
-        if (routingSlip.size() > 0) {
-            List<String> destinations = routingSlip.get(routingSlip.size() - 1);
-            routingSlip.remove(routingSlip.size() - 1);
+        LinkedList<List<String>> routingSlip = cloudEvent.getRoutingSlip().orElse(new LinkedList<>());
+        if (!routingSlip.isEmpty()) {
+            List<String> destinations = routingSlip.removeLast();
             // Check if valid topic?
             for (String topic : destinations) {
                 this.sendCloudEvent(cloudEvent, topic, originalMessageId);
