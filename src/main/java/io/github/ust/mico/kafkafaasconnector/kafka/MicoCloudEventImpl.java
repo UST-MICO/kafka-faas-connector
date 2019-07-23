@@ -19,7 +19,10 @@
 
 package io.github.ust.mico.kafkafaasconnector.kafka;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -32,8 +35,10 @@ import lombok.experimental.Accessors;
 
 import java.net.URI;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -63,7 +68,8 @@ public class MicoCloudEventImpl<T> implements CloudEvent<T> {
     private URI schemaURL;
     private String contentType;
     private T data;
-    private List<Extension> extensions = new LinkedList<>();
+    @JsonIgnore
+    private Map<String, JsonNode> extensionsMap = new HashMap<>();
 
     private String correlationId;
     private String createdFrom;
@@ -97,7 +103,7 @@ public class MicoCloudEventImpl<T> implements CloudEvent<T> {
             cloudEvent.schemaURL,
             cloudEvent.contentType,
             cloudEvent.data,
-            cloudEvent.extensions,
+            cloudEvent.extensionsMap,
             cloudEvent.correlationId,
             cloudEvent.createdFrom,
             cloudEvent.route,
@@ -123,7 +129,7 @@ public class MicoCloudEventImpl<T> implements CloudEvent<T> {
     }
 
 
-    public MicoCloudEventImpl<T> setBaseCloudEvent(CloudEvent<T> cloudEvent) {
+    public MicoCloudEventImpl<T> setBaseCloudEvent(MicoCloudEventImpl<T> cloudEvent) {
         id = cloudEvent.getId();
         specVersion = cloudEvent.getSpecVersion();
         source = cloudEvent.getSource();
@@ -131,20 +137,19 @@ public class MicoCloudEventImpl<T> implements CloudEvent<T> {
         data = cloudEvent.getData().orElse(null);
         contentType = cloudEvent.getContentType().orElse(null);
         schemaURL = cloudEvent.getSchemaURL().orElse(null);
-        extensions = cloudEvent.getExtensions().orElse(null);
+        extensionsMap = cloudEvent.getExtensionsAsMap().orElse(new HashMap<String, JsonNode>());
         time = cloudEvent.getTime().orElse(null);
         return this;
     }
 
     @JsonAnySetter
-    public void setUnknownExtensions(String key, String value) {
-        UnknownExtension unknownExtension = new UnknownExtension(key, value);
-        extensions.add(unknownExtension);
+    public void setExtension(String key, JsonNode value) {
+        extensionsMap.put(key, value);
     }
 
-    public MicoCloudEventImpl<T> addExtension(Extension extension) {
-        extensions.add(extension);
-        return this;
+    @JsonAnyGetter
+    public Map<String, JsonNode> getExtensionsForSerializer() {
+        return extensionsMap;
     }
 
     public Optional<ZonedDateTime> getTime() {
@@ -163,8 +168,23 @@ public class MicoCloudEventImpl<T> implements CloudEvent<T> {
         return Optional.ofNullable(data);
     }
 
+    @JsonIgnore
+    public Optional<Map<String, JsonNode>> getExtensionsAsMap() {
+        return Optional.ofNullable(extensionsMap);
+    }
+
+    /**
+     * Method is needed to comply with cloud event parent class.
+     * Use getExtensionsAsMap!
+     */
+    @Deprecated
+    @JsonIgnore
     public Optional<List<Extension>> getExtensions() {
-        return Optional.ofNullable(extensions);
+        List<Extension> extensionList = new LinkedList<>();
+        this.extensionsMap.forEach((key, value) -> {
+            extensionList.add(new UnknownExtension(key, value));
+        });
+        return Optional.ofNullable(extensionList);
     }
 
     public Optional<String> getCorrelationId() {

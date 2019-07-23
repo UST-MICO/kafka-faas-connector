@@ -19,6 +19,8 @@
 
 package io.github.ust.mico.kafkafaasconnector.kafka;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import io.cloudevents.Extension;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,5 +33,5 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class UnknownExtension implements Extension {
     String key;
-    String value;
+    JsonNode value;
 }
