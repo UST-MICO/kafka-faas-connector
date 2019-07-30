@@ -1,5 +1,5 @@
 FROM maven:3.6-jdk-8-alpine as builder
-WORKDIR /workspace
+WORKDIR /app
 
 #Cache dependencies
 COPY pom.xml .
@@ -11,7 +11,7 @@ RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
 FROM openjdk:8-jre-alpine
 ENV JAVA_OPTS="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
-ARG DEPENDENCY=/workspace/target/dependency
+ARG DEPENDENCY=/app/target/dependency
 COPY --from=builder ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=builder ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=builder ${DEPENDENCY}/BOOT-INF/classes /app
