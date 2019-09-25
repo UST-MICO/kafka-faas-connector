@@ -51,11 +51,11 @@ public class ConfigurationTests {
     @ClassRule
     public static EmbeddedKafkaRule broker = new EmbeddedKafkaRule(1, false);
 
+
     @ClassRule
     public static final EnvironmentVariables environmentVariables = new EnvironmentVariables()
         .set("OPENFAAS_FUNCTION_NAME", "openfaas_name")
         .set("OPENFAAS_GATEWAY","openfaas_gateway")
-        .set("KAFKA_GROUP_ID", "kafka_group_id")
         .set("KAFKA_TOPIC_INPUT", "kafka_in")
         .set("KAFKA_TOPIC_INVALID_MESSAGE", "kafka_invalid")
         .set("KAFKA_TOPIC_OUTPUT", "kafka_out")
@@ -78,5 +78,10 @@ public class ConfigurationTests {
         assertThat(System.getenv("KAFKA_TOPIC_INVALID_MESSAGE"), is(kafkaConfig.getInvalidMessageTopic()));
         assertThat(System.getenv("KAFKA_TOPIC_DEAD_LETTER"), is(kafkaConfig.getDeadLetterTopic()));
         assertThat(System.getenv("KAFKA_TOPIC_TEST_MESSAGE_OUTPUT"), is(kafkaConfig.getTestMessageOutputTopic()));
+    }
+
+    @Test
+    public void testGroupId() {
+        assertTrue(kafkaConfig.getGroupId().length() == 36);
     }
 }
