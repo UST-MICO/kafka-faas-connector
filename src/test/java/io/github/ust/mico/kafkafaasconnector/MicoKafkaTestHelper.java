@@ -168,7 +168,7 @@ public class MicoKafkaTestHelper {
      * @return
      */
     public ConsumerRecord<String, MicoCloudEventImpl<JsonNode>> exchangeMessage(Consumer<String, MicoCloudEventImpl<JsonNode>> consumer, String topic, MicoCloudEventImpl<JsonNode> cloudEventSimple) {
-        template.send(kafkaConfig.getInputTopic(), "0", cloudEventSimple);
+        template.send(kafkaConfig.getInputTopic(), cloudEventSimple);
         return KafkaTestUtils.getSingleRecord(consumer, topic, DEFAULT_KAFKA_POLL_TIMEOUT);
     }
 

@@ -72,16 +72,11 @@ public class ConfigurationTests {
     @Test
     public void testKafkaConfig() {
         // Tests if the environment variables are injected into KafkaConfig
-        assertThat(System.getenv("KAFKA_GROUP_ID"), is(kafkaConfig.getGroupId()));
+        assertTrue(kafkaConfig.getGroupId().length() == 36);
         assertThat(System.getenv("KAFKA_TOPIC_INPUT"), is(kafkaConfig.getInputTopic()));
         assertThat(System.getenv("KAFKA_TOPIC_OUTPUT"), is(kafkaConfig.getOutputTopic()));
         assertThat(System.getenv("KAFKA_TOPIC_INVALID_MESSAGE"), is(kafkaConfig.getInvalidMessageTopic()));
         assertThat(System.getenv("KAFKA_TOPIC_DEAD_LETTER"), is(kafkaConfig.getDeadLetterTopic()));
         assertThat(System.getenv("KAFKA_TOPIC_TEST_MESSAGE_OUTPUT"), is(kafkaConfig.getTestMessageOutputTopic()));
-    }
-
-    @Test
-    public void testGroupId() {
-        assertTrue(kafkaConfig.getGroupId().length() == 36);
     }
 }
